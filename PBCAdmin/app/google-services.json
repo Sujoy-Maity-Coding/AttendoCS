@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "791581043085",
+    "project_id": "pbc-sujoy-maity",
+    "storage_bucket": "pbc-sujoy-maity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791581043085:android:17edfa6f85bddd2c66b5c4",
+        "android_client_info": {
+          "package_name": "com.sujoy.pbcadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNh5bvZEszqKbjTF6ISrh3FxYXMjaclGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
