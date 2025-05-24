@@ -1,5 +1,7 @@
 package com.sujoy.pbc.presentation.screens
 
+import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,82 +44,79 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sujoy.pbc.R
+import com.sujoy.pbc.presentation.Util.AnimaterLottie
 import com.sujoy.pbc.presentation.Util.DropdownMenuComponent
+import com.sujoy.pbc.ui.theme.PrimaryColor
+import com.sujoy.pbc.ui.theme.SecondaryColor
 
 @Preview(showSystemUi = true)
 @Composable
 fun ui(modifier: Modifier = Modifier) {
-    var paper by remember { mutableStateOf("") }
-    Column(modifier = Modifier
+    var idNo by remember { mutableStateOf("") }
+    var roll by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var department by remember { mutableStateOf("") }
+    var registrationYear by remember { mutableStateOf("") }
+    var semester by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally,) {
-        Box(
+        .background(Color.White)) {
+        Image(painter = painterResource(id = R.drawable.bg1up), contentDescription = "upperbackground",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .background(
-                    Color.Green,
-                    shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)
-                )
-                .clip(RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Attendance Screen",
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                fontFamily = FontFamily.Serif
-            )
-        }
-
-        Box(
+                .align(Alignment.TopCenter), contentScale = ContentScale.FillWidth)
+        Image(painter = painterResource(id = R.drawable.bg2), contentDescription = "lowerbackground",
             modifier = Modifier
-                .weight(2.5f)
                 .fillMaxWidth()
-                .padding(16.dp)
-                .background(Color.White),
-            contentAlignment = Alignment.Center
-        ) {
-            DropdownMenuComponent(
-                "Select Paper",
-                listOf("CC1", "CC2", "SEC", "MDC")
-            ) { paper = it }
-        }
-
+                .align(Alignment.BottomCenter), contentScale = ContentScale.FillWidth)
         Column(
             modifier = Modifier
-                .weight(7f)
-                .fillMaxWidth()
-                .background(
-                    Color.Green,
-                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                )
-                .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+                .fillMaxSize()
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Row(horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Total Class:", fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.SemiBold)
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "20", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            Text(
+                text = "Create Your Account",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Serif,
+                color = PrimaryColor
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(Color.White),
+                modifier = Modifier.size(200.dp),
+                elevation = CardDefaults.cardElevation(5.dp),
+                border = BorderStroke(1.dp, PrimaryColor)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.face_id),
+                        contentDescription = "SignUp",
+                        modifier = Modifier.size(50.dp),
+                        colorFilter = ColorFilter.tint(Color.Gray),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Text(
+                        text = "Select your passport size image with 3:4 ratio and size <= 1mb",
+                        fontSize = 15.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Absent Class:", fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.SemiBold)
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "20", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Percentage Class:", fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.SemiBold)
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "20", fontSize = 25.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            }
+            Spacer(modifier = Modifier.height(10.dp))
+
         }
     }
 }

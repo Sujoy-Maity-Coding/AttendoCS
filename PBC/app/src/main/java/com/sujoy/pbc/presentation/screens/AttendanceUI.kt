@@ -34,6 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sujoy.pbc.presentation.Util.DropdownMenuComponent
 import com.sujoy.pbc.presentation.navigation.Routes
 import com.sujoy.pbc.presentation.viewmodel.AppViewModel
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun AttendanceUI(modifier: Modifier = Modifier, viewModel: AppViewModel = hiltViewModel(), args: Routes.attendanceScreen) {
@@ -57,7 +58,7 @@ fun AttendanceUI(modifier: Modifier = Modifier, viewModel: AppViewModel = hiltVi
                 .fillMaxWidth()
                 .height(70.dp)
                 .background(
-                    Color.Green,
+                    PrimaryColor,
                     shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)
                 )
                 .clip(RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)),
@@ -82,7 +83,7 @@ fun AttendanceUI(modifier: Modifier = Modifier, viewModel: AppViewModel = hiltVi
         ) {
             DropdownMenuComponent(
                 "Select Paper",
-                listOf("CC1", "CC2", "SEC2", "SEC1")
+                listOf("CC2", "SEC2")
             ) { paper = it }
         }
 
@@ -91,7 +92,7 @@ fun AttendanceUI(modifier: Modifier = Modifier, viewModel: AppViewModel = hiltVi
                 .weight(7f)
                 .fillMaxWidth()
                 .background(
-                    Color.Green,
+                    PrimaryColor,
                     shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                 )
                 .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),

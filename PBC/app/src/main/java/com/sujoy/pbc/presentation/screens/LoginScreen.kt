@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -59,6 +60,7 @@ import com.sujoy.pbc.presentation.Util.DropdownMenuComponent
 import com.sujoy.pbc.presentation.Util.Prefs
 import com.sujoy.pbc.presentation.navigation.Routes
 import com.sujoy.pbc.presentation.viewmodel.AppViewModel
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController) {
@@ -76,8 +78,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
     LaunchedEffect(loginScreenState) {
         loginScreenState.userData?.takeIf { it.isNotEmpty() }?.let {
             Toast.makeText(context, "Login Successful😊", Toast.LENGTH_SHORT).show()
-            navController.navigate(Routes.homeScreen){
-                popUpTo(Routes.LoginScreen){
+            navController.navigate(Routes.homeScreen) {
+                popUpTo(Routes.LoginScreen) {
                     inclusive = true
                 }
             }
@@ -89,39 +91,41 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             Toast.makeText(context, "Loading...", Toast.LENGTH_SHORT).show()
         }
     }
-    Box(modifier = Modifier.fillMaxSize()) {
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.bg1up),
+            colorFilter = ColorFilter.tint(Color(0x9444BBA4)),
+            contentDescription = "upperbackground",
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.3f)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.login),
-                contentDescription = "Login",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
-        }
+                .align(Alignment.TopCenter),
+            contentScale = ContentScale.FillWidth
+        )
+        Image(
+            painter = painterResource(id = R.drawable.bg2), contentDescription = "lowerbackground",
+            colorFilter = ColorFilter.tint(Color(0x9444BBA4)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter), contentScale = ContentScale.FillWidth
+        )
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.72f)
-                .verticalScroll(rememberScrollState())
-                .align(Alignment.BottomEnd)
-                .background(
-                    Color.White,
-                    shape = RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp)
-                )
-                .clip(shape = RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp))
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Welcome Back",
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Serif,
-                color = Color(0xFF00EC33)
+                color = PrimaryColor
             )
             Spacer(modifier = Modifier.height(15.dp))
             DropdownMenuComponent(
@@ -150,11 +154,11 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF00EC33),
-                    unfocusedIndicatorColor = Color(0xFF00EC33),
-                    cursorColor = Color(0xFF00EC33),
-                    focusedLabelColor = Color(0xFF00EC33),
-                    unfocusedLabelColor = Color(0xFF00EC33)
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
                 ),
                 textStyle = TextStyle(
                     color = Color.Black
@@ -170,11 +174,11 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF00EC33),
-                    unfocusedIndicatorColor = Color(0xFF00EC33),
-                    cursorColor = Color(0xFF00EC33),
-                    focusedLabelColor = Color(0xFF00EC33),
-                    unfocusedLabelColor = Color(0xFF00EC33)
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
                 ),
                 textStyle = TextStyle(
                     color = Color.Black
@@ -185,8 +189,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             Button(
                 onClick = {
                     if (registrationYear.isEmpty() || department.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
-                    }else {
+                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
                         // Save reg year and dept to SharedPreferences
                         prefs.saveRegYear(registrationYear)
                         prefs.saveDepartment(department)
@@ -210,8 +215,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xFF00EC33)),
-                border = BorderStroke(2.dp, Color(0xFF00EC33))
+                colors = ButtonDefaults.buttonColors(PrimaryColor),
+                border = BorderStroke(2.dp, PrimaryColor)
             ) {
                 Text(
                     "Login",
@@ -234,7 +239,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
                     text = "SignUp",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Green,
+                    color = PrimaryColor,
                     modifier = Modifier.clickable {
                         navController.navigate(Routes.signUpScreen)
                     })

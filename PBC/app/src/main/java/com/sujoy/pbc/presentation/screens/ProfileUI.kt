@@ -44,6 +44,7 @@ import com.sujoy.pbc.presentation.Util.AnimaterLottie
 import com.sujoy.pbc.presentation.Util.Prefs
 import com.sujoy.pbc.presentation.navigation.Routes
 import com.sujoy.pbc.presentation.viewmodel.AppViewModel
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun ProfileUI(modifier: Modifier = Modifier,
@@ -121,7 +122,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "ID",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }
@@ -142,7 +143,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "Roll",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }
@@ -163,7 +164,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "Department",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }
@@ -184,7 +185,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "Semester",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }
@@ -205,7 +206,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "Reg. Yr.",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }
@@ -226,7 +227,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "Phone",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }
@@ -247,7 +248,7 @@ fun ProfileUI(modifier: Modifier = Modifier,
                     Card(modifier= Modifier
                         .align(Alignment.CenterVertically),
                         shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color(0xFF01BD2A)),
+                        colors = CardDefaults.cardColors(PrimaryColor),
                         elevation = CardDefaults.cardElevation(5.dp)){
                         Text(text = "Email",fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.White, fontFamily = FontFamily.SansSerif, modifier = Modifier.padding(8.dp))
                     }

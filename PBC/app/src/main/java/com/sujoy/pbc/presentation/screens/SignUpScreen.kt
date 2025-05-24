@@ -27,6 +27,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -42,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -66,6 +69,7 @@ import com.sujoy.pbc.presentation.Util.getFileSizeInMB
 import com.sujoy.pbc.presentation.Util.isPassportPhoto
 import com.sujoy.pbc.presentation.navigation.Routes
 import com.sujoy.pbc.presentation.viewmodel.AppViewModel
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun SignUpScreen(
@@ -88,26 +92,32 @@ fun SignUpScreen(
     var password by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            val fileSize = getFileSizeInMB(context, it)
-            val isPassport = isPassportPhoto(context, it)
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                val fileSize = getFileSizeInMB(context, it)
+                val isPassport = isPassportPhoto(context, it)
 
-            if (fileSize > 1) {
-                Toast.makeText(context, "Image size must be less than 1 MB", Toast.LENGTH_SHORT).show()
-            } else if (!isPassport) {
-                Toast.makeText(context, "Please select a passport-size photo (e.g., 600x800 or 3:4)", Toast.LENGTH_SHORT).show()
-            } else {
-                imageUri = it
+                if (fileSize > 1) {
+                    Toast.makeText(context, "Image size must be less than 1 MB", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (!isPassport) {
+                    Toast.makeText(
+                        context,
+                        "Please select a passport-size photo (e.g., 600x800 or 3:4)",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    imageUri = it
+                }
             }
         }
-    }
 
     LaunchedEffect(signUpScreenState) {
         signUpScreenState.userData?.takeIf { it.isNotEmpty() }?.let {
             Toast.makeText(context, "Sign Up Successful😊", Toast.LENGTH_SHORT).show()
-            navController.navigate(Routes.homeScreen){
-                popUpTo(Routes.LoginScreen){
+            navController.navigate(Routes.homeScreen) {
+                popUpTo(Routes.LoginScreen) {
                     inclusive = true
                 }
             }
@@ -119,267 +129,285 @@ fun SignUpScreen(
             Toast.makeText(context, "Loading...", Toast.LENGTH_SHORT).show()
         }
     }
-    Box(modifier = Modifier.fillMaxSize()) {
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.bg1up),
+            colorFilter = ColorFilter.tint(Color(0x9444BBA4)),
+            contentDescription = "upperbackground",
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.3f)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.signup),
-                contentDescription = "SignUp",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
-        }
+                .align(Alignment.TopCenter),
+            contentScale = ContentScale.FillWidth
+        )
+        Image(
+            painter = painterResource(id = R.drawable.bg2), contentDescription = "lowerbackground",
+            colorFilter = ColorFilter.tint(Color(0x9444BBA4)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter), contentScale = ContentScale.FillWidth
+        )
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.72f)
-                .align(Alignment.BottomEnd)
-                .verticalScroll(rememberScrollState())
-                .background(
-                    Color.White,
-                    shape = RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp)
-                )
-                .clip(shape = RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp))
-                .padding(15.dp)
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Create Your Account",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Serif,
-                    color = Color(0xFF00EC33)
-                )
-                Spacer(modifier = Modifier.height(15.dp))
-                // Image Picker
-                if (imageUri == null) {
-                    Box(modifier = Modifier
-                        .size(150.dp)
-                        .border(1.dp, Color(0xFF00EC33), RoundedCornerShape(20.dp))
-                        .clip(RoundedCornerShape(20.dp))
-                        .clickable { launcher.launch("image/*") }) {
+            Text(
+                text = "Create Your Account",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Serif,
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 20.dp)
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            // Image Picker
+            if (imageUri == null) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(Color.White),
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clickable { launcher.launch("image/*") },
+                    elevation = CardDefaults.cardElevation(5.dp),
+                    border = BorderStroke(1.dp, PrimaryColor)
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.face_id),
+                            contentDescription = "SignUp",
+                            modifier = Modifier.size(50.dp),
+                            colorFilter = ColorFilter.tint(Color.Gray),
+                            contentScale = ContentScale.FillBounds
+                        )
                         Text(
-                            text = "Select your\npassport size\nimage",
-                            fontSize = 17.sp,
+                            text = "Select your passport size image with 3:4 ratio and size <= 1mb",
+                            fontSize = 15.sp,
                             color = Color.Gray,
-                            modifier = Modifier.align(Alignment.Center)
+                            modifier = Modifier.padding(10.dp)
                         )
                     }
                 }
-                imageUri?.let { uri ->
-                    Image(
-                        painter = rememberImagePainter(uri),
-                        contentDescription = "profile img",
-                        modifier = Modifier
-                            .size(200.dp)
-                            .border(1.dp, Color(0xFF00EC33), RoundedCornerShape(20.dp))
-                            .clip(RoundedCornerShape(20.dp)),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(
-                    value = idNo,
-                    onValueChange = { idNo = it },
-                    label = { Text("Enter ID no.") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color(0xFF00EC33),
-                        unfocusedIndicatorColor = Color(0xFF00EC33),
-                        cursorColor = Color(0xFF00EC33),
-                        focusedLabelColor = Color(0xFF00EC33),
-                        unfocusedLabelColor = Color(0xFF00EC33)
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(
-                    value = roll,
-                    onValueChange = { roll = it },
-                    label = { Text("Enter Roll") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color(0xFF00EC33),
-                        unfocusedIndicatorColor = Color(0xFF00EC33),
-                        cursorColor = Color(0xFF00EC33),
-                        focusedLabelColor = Color(0xFF00EC33),
-                        unfocusedLabelColor = Color(0xFF00EC33)
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("Enter Name") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color(0xFF00EC33),
-                        unfocusedIndicatorColor = Color(0xFF00EC33),
-                        cursorColor = Color(0xFF00EC33),
-                        focusedLabelColor = Color(0xFF00EC33),
-                        unfocusedLabelColor = Color(0xFF00EC33)
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                DropdownMenuComponent(
-                    "Select registration Year",
-                    listOf("2023", "2024", "2025")
-                ) {
-                    registrationYear = it
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                DropdownMenuComponent(
-                    "Select Department",
-                    listOf("COSH", "PHSE", "BNG", "ENG")
-                ) { department = it }
-                Spacer(modifier = Modifier.height(10.dp))
-                DropdownMenuComponent(
-                    "Select Semester",
-                    listOf("1", "2", "3", "4", "5", "6", "7", "8")
-                ) {
-                    semester = it
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(
-                    value = phone,
-                    onValueChange = { phone = it },
-                    label = { Text("Enter Phone No.") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color(0xFF00EC33),
-                        unfocusedIndicatorColor = Color(0xFF00EC33),
-                        cursorColor = Color(0xFF00EC33),
-                        focusedLabelColor = Color(0xFF00EC33),
-                        unfocusedLabelColor = Color(0xFF00EC33)
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text("Enter Email") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color(0xFF00EC33),
-                        unfocusedIndicatorColor = Color(0xFF00EC33),
-                        cursorColor = Color(0xFF00EC33),
-                        focusedLabelColor = Color(0xFF00EC33),
-                        unfocusedLabelColor = Color(0xFF00EC33)
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Enter Password") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color(0xFF00EC33),
-                        unfocusedIndicatorColor = Color(0xFF00EC33),
-                        cursorColor = Color(0xFF00EC33),
-                        focusedLabelColor = Color(0xFF00EC33),
-                        unfocusedLabelColor = Color(0xFF00EC33)
-                    ),
-                    textStyle = TextStyle(
-                        color = Color.Black
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Button(
-                    onClick = {
-                        if(idNo.isEmpty() || roll.isEmpty() || name.isEmpty() || department.isEmpty() || registrationYear.isEmpty() || semester.isEmpty() || phone.isEmpty() || email.isEmpty() || imageUri == null){
-                            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
-                            return@Button
-                        }else {
-                            // Save reg year and dept to SharedPreferences
-                            prefs.saveRegYear(registrationYear)
-                            prefs.saveDepartment(department)
-                            prefs.saveSemester(semester)
-
-                            viewModel.createUser(
-                                UserData(
-                                    idNo = idNo,
-                                    roll = roll,
-                                    Name = name,
-                                    department = department,
-                                    year = registrationYear,
-                                    semester = semester,
-                                    phone = phone,
-                                    email = email,
-                                    password = password
-                                ),
-                                registrationYear, department, imageUri, idNo
-                            )
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color(0xFF00EC33)),
-                    border = BorderStroke(2.dp, Color(0xFF00EC33))
-                ) {
-                    Text(
-                        "SignUp",
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Already have an account? ",
-                        fontSize = 15.sp,
-                        color = Color.Black
-                    )
-                    Text(
-                        text = "Login",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Green,
-                        modifier = Modifier.clickable {
-                            navController.navigate(Routes.LoginScreen)
-                        })
-                }
             }
+            imageUri?.let { uri ->
+                Image(
+                    painter = rememberImagePainter(uri),
+                    contentDescription = "profile img",
+                    modifier = Modifier
+                        .size(200.dp)
+                        .border(1.dp, PrimaryColor, RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(20.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = idNo,
+                onValueChange = { idNo = it },
+                label = { Text("Enter ID no.") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = roll,
+                onValueChange = { roll = it },
+                label = { Text("Enter Roll") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Enter Name") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            DropdownMenuComponent(
+                "Select registration Year",
+                listOf("2023", "2024", "2025")
+            ) {
+                registrationYear = it
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            DropdownMenuComponent(
+                "Select Department",
+                listOf("COSH", "PHSE", "BNG", "ENG")
+            ) { department = it }
+            Spacer(modifier = Modifier.height(10.dp))
+            DropdownMenuComponent(
+                "Select Semester",
+                listOf("1", "2", "3", "4", "5", "6", "7", "8")
+            ) {
+                semester = it
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = phone,
+                onValueChange = { phone = it },
+                label = { Text("Enter Phone No.") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Enter Email") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Enter Password") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
+                ),
+                textStyle = TextStyle(
+                    color = Color.Black
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = {
+                    if (idNo.isEmpty() || roll.isEmpty() || name.isEmpty() || department.isEmpty() || registrationYear.isEmpty() || semester.isEmpty() || phone.isEmpty() || email.isEmpty() || imageUri == null) {
+                        Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT)
+                            .show()
+                        return@Button
+                    } else {
+                        // Save reg year and dept to SharedPreferences
+                        prefs.saveRegYear(registrationYear)
+                        prefs.saveDepartment(department)
+                        prefs.saveSemester(semester)
+
+                        viewModel.createUser(
+                            UserData(
+                                idNo = idNo,
+                                roll = roll,
+                                Name = name,
+                                department = department,
+                                year = registrationYear,
+                                semester = semester,
+                                phone = phone,
+                                email = email,
+                                password = password
+                            ),
+                            registrationYear, department, imageUri, idNo
+                        )
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(PrimaryColor),
+                border = BorderStroke(2.dp, PrimaryColor)
+            ) {
+                Text(
+                    "SignUp",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Already have an account? ",
+                    fontSize = 15.sp,
+                    color = Color.Black
+                )
+                Text(
+                    text = "Login",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryColor,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Routes.LoginScreen)
+                    })
+            }
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }

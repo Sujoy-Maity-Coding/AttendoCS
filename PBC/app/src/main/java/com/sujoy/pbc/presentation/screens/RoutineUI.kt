@@ -47,6 +47,7 @@ import com.sujoy.pbc.presentation.Util.AnimaterLottie
 import com.sujoy.pbc.presentation.Util.Prefs
 import com.sujoy.pbc.presentation.navigation.Routes
 import com.sujoy.pbc.presentation.viewmodel.AppViewModel
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun RoutineUI(
@@ -101,7 +102,7 @@ fun RoutineUI(
                     .fillMaxWidth()
                     .height(70.dp)
                     .background(
-                        Color.Green,
+                        PrimaryColor,
                         shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)
                     )
                     .clip(RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)),

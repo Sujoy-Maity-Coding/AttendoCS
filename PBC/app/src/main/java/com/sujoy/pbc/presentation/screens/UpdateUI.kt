@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,10 +20,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -38,8 +42,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -59,8 +65,11 @@ import com.sujoy.pbc.domain.model.UserDataParent
 import com.sujoy.pbc.presentation.Util.AnimaterLottie
 import com.sujoy.pbc.presentation.Util.DropdownMenuComponent
 import com.sujoy.pbc.presentation.Util.Prefs
+import com.sujoy.pbc.presentation.Util.getFileSizeInMB
+import com.sujoy.pbc.presentation.Util.isPassportPhoto
 import com.sujoy.pbc.presentation.navigation.Routes
 import com.sujoy.pbc.presentation.viewmodel.AppViewModel
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun UpdateUI(
@@ -74,10 +83,28 @@ fun UpdateUI(
     val regYear = prefs.getRegYear()
     val dept = prefs.getDepartment()
 
-    val imageUri = remember { mutableStateOf<Uri?>(null) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        imageUri.value = uri
-    }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                val fileSize = getFileSizeInMB(context, it)
+                val isPassport = isPassportPhoto(context, it)
+
+                if (fileSize > 1) {
+                    Toast.makeText(context, "Image size must be less than 1 MB", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (!isPassport) {
+                    Toast.makeText(
+                        context,
+                        "Please select a passport-size photo (e.g., 600x800 or 3:4)",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    imageUri = it
+                }
+            }
+        }
 
     // Fetch the user data on screen load
     LaunchedEffect(key1 = true) {
@@ -135,36 +162,51 @@ fun UpdateUI(
                 text = "Welcome to Edit screen🎉",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Green,
+                color = PrimaryColor,
                 fontFamily = FontFamily.Serif
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Box(
-                modifier = Modifier
-                    .size(150.dp)
-                    .clickable { launcher.launch("image/*") }
-            ) {
-                if (imageUri.value != null) {
-                    Image(
-                        painter = rememberAsyncImagePainter(imageUri.value),
-                        contentDescription = "Selected Image",
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(CircleShape)
-                            .border(2.dp, Color.Green, CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Image(
-                        painter = rememberImagePainter(profileState.userData?.userData?.image),
-                        contentDescription = "Profile Image",
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(CircleShape)
-                            .border(2.dp, Color.Green, CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
+            if (imageUri == null) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(Color.White),
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clickable { launcher.launch("image/*") },
+                    elevation = CardDefaults.cardElevation(5.dp),
+                    border = BorderStroke(1.dp, PrimaryColor)
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.face_id),
+                            contentDescription = "Updated profile",
+                            modifier = Modifier.size(50.dp),
+                            colorFilter = ColorFilter.tint(Color.Gray),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Text(
+                            text = "Select your passport size image with 3:4 ratio and size <= 1mb",
+                            fontSize = 15.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
                 }
+            }
+            imageUri?.let { uri ->
+                Image(
+                    painter = rememberImagePainter(uri),
+                    contentDescription = "profile img",
+                    modifier = Modifier
+                        .size(200.dp)
+                        .border(1.dp, PrimaryColor, RoundedCornerShape(20.dp))
+                        .clip(RoundedCornerShape(20.dp)),
+                    contentScale = ContentScale.Crop
+                )
             }
 
             var name by remember {
@@ -201,11 +243,11 @@ fun UpdateUI(
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color.Green,
-                    unfocusedIndicatorColor = Color.Green,
-                    cursorColor = Color.Green,
-                    focusedLabelColor = Color.Green,
-                    unfocusedLabelColor = Color.Green
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
                 ),
                 textStyle = TextStyle(
                     color = Color.Black
@@ -222,11 +264,11 @@ fun UpdateUI(
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color.Green,
-                    unfocusedIndicatorColor = Color.Green,
-                    cursorColor = Color.Green,
-                    focusedLabelColor = Color.Green,
-                    unfocusedLabelColor = Color.Green
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
                 ),
                 textStyle = TextStyle(
                     color = Color.Black
@@ -244,11 +286,11 @@ fun UpdateUI(
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color.Green,
-                    unfocusedIndicatorColor = Color.Green,
-                    cursorColor = Color.Green,
-                    focusedLabelColor = Color.Green,
-                    unfocusedLabelColor = Color.Green
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
                 ),
                 textStyle = TextStyle(
                     color = Color.Black
@@ -273,11 +315,11 @@ fun UpdateUI(
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Color.Green,
-                    unfocusedIndicatorColor = Color.Green,
-                    cursorColor = Color.Green,
-                    focusedLabelColor = Color.Green,
-                    unfocusedLabelColor = Color.Green
+                    focusedIndicatorColor = PrimaryColor,
+                    unfocusedIndicatorColor = PrimaryColor,
+                    cursorColor = PrimaryColor,
+                    focusedLabelColor = PrimaryColor,
+                    unfocusedLabelColor = PrimaryColor
                 ),
                 textStyle = TextStyle(
                     color = Color.Black
@@ -312,10 +354,10 @@ fun UpdateUI(
                         ),
                         regYear!!,
                         dept!!,
-                        imageUri.value
+                        imageUri
                     )
                 },
-                colors = ButtonDefaults.buttonColors(Color.Green),
+                colors = ButtonDefaults.buttonColors(PrimaryColor),
                 modifier = Modifier.width(317.dp)
             ) {
                 if (updateState.isLoading) {

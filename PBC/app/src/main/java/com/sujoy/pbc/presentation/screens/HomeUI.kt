@@ -79,271 +79,297 @@ fun HomeUI(modifier: Modifier = Modifier,
 
     if (profileState.isLoading) {
         Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+            .fillMaxSize(),
             contentAlignment = Alignment.Center){
+            Image(painter = painterResource(id = R.drawable.bg), contentDescription = "background",modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             AnimaterLottie(lottieRes = R.raw.lottie_hand_loading)
         }
     } else if (profileState.error != null) {
         Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+            .fillMaxSize(),
             contentAlignment = Alignment.Center) {
+            Image(painter = painterResource(id = R.drawable.bg), contentDescription = "background",modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             Text(text = profileState.error!!, color = Color.Red)
         }
     } else if (fetchWebUrlState.error != null){
         Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+            .fillMaxSize(),
             contentAlignment = Alignment.Center) {
+            Image(painter = painterResource(id = R.drawable.bg), contentDescription = "background",modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             Text(text = "Attedance sheet not found", color = Color.Red)
         }
-    } else{
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(
+    } else {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.bg),
+                contentDescription = "background",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            Column(
                 modifier = Modifier
-                    .size(175.dp)
-                    .padding(15.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = rememberImagePainter(profileState.userData?.userData?.image), contentDescription = "",
+                Box(
                     modifier = Modifier
                         .size(175.dp)
-                        .clip(shape = CircleShape),
-                    contentScale = ContentScale.Crop
+                        .padding(15.dp)
+                ) {
+                    Image(
+                        painter = rememberImagePainter(profileState.userData?.userData?.image),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(175.dp)
+                            .clip(shape = CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Card(
+                        modifier = Modifier
+                            .size(35.dp)
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 10.dp, bottom = 10.dp)
+                            .clickable { navController.navigate(Routes.updateScreen) },
+                        colors = CardDefaults.cardColors(Color.White),
+                        elevation = CardDefaults.cardElevation(5.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.user_edit),
+                            tint = Color.DarkGray,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(5.dp)
+                        )
+                    }
+                }
+                Text(
+                    text = "${profileState.userData?.userData?.Name}",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    fontFamily = FontFamily.Serif
                 )
+                Image(
+                    painter = painterResource(id = R.drawable.bg_green),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.FillWidth
+                )
+                Spacer(modifier = Modifier.height(10.dp))
                 Card(
                     modifier = Modifier
-                        .size(35.dp)
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 10.dp, bottom = 10.dp)
-                        .clickable { navController.navigate(Routes.updateScreen) },
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(horizontal = 17.dp)
+                        .clickable { navController.navigate(Routes.profileScreen) },
+                    shape = RoundedCornerShape(topEnd = 20.dp, bottomStart = 20.dp),
                     colors = CardDefaults.cardColors(Color.White),
                     elevation = CardDefaults.cardElevation(5.dp)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.user_edit),
-                        tint = Color.DarkGray,
-                        contentDescription = "",
+                    Row(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(5.dp)
-                    )
-                }
-            }
-            Text(
-                text = "${profileState.userData?.userData?.Name}",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                fontFamily = FontFamily.Serif
-            )
-            Image(
-                painter = painterResource(id = R.drawable.bg_green),
-                contentDescription = "",
-                modifier = Modifier.fillMaxWidth(),
-                contentScale = ContentScale.FillWidth
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 17.dp)
-                    .clickable { navController.navigate(Routes.profileScreen) },
-                shape = RoundedCornerShape(topEnd = 20.dp, bottomStart = 20.dp),
-                colors = CardDefaults.cardColors(Color.White),
-                elevation = CardDefaults.cardElevation(5.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 15.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Card(
-                        modifier = Modifier
-                            .size(35.dp)
-                            .align(Alignment.CenterVertically),
-                        shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(5.dp)
+                            .padding(horizontal = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.user),
-                            contentDescription = "",
+                        Card(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
+                                .size(35.dp)
+                                .align(Alignment.CenterVertically),
+                            shape = CircleShape,
+                            colors = CardDefaults.cardColors(Color.White),
+                            elevation = CardDefaults.cardElevation(5.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.user),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp)
+                            )
+                        }
+                        Text(
+                            text = "My Profile",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.DarkGray,
+                            fontFamily = FontFamily.SansSerif,
+                            modifier = Modifier.padding(start = 15.dp)
                         )
                     }
-                    Text(
-                        text = "My Profile",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.DarkGray,
-                        fontFamily = FontFamily.SansSerif,
-                        modifier = Modifier.padding(start = 15.dp)
-                    )
                 }
-            }
-            Spacer(modifier = Modifier.height(18.dp))
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 17.dp)
-                    .clickable {
-                        coroutineScope.launch {
-                            viewModel.getWebUrl(
-                                regYear!!,
-                                dept!!,
-                                profileState.userData?.userData?.semester.toString()
-                            )
-                            viewModel.getWebUrlState.collectLatest { fetchWebUrlState ->
-                                when {
-                                    fetchWebUrlState.isLoading -> {
-                                        Toast.makeText(context, "Loading...", Toast.LENGTH_SHORT).show()
-                                    }
+                Spacer(modifier = Modifier.height(18.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(horizontal = 17.dp)
+                        .clickable {
+                            coroutineScope.launch {
+                                viewModel.getWebUrl(
+                                    regYear!!,
+                                    dept!!,
+                                    profileState.userData?.userData?.semester.toString()
+                                )
+                                viewModel.getWebUrlState.collectLatest { fetchWebUrlState ->
+                                    when {
+                                        fetchWebUrlState.isLoading -> {
+                                            Toast
+                                                .makeText(context, "Loading...", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
 
-                                    !fetchWebUrlState.webUrl.isNullOrEmpty() -> {
-                                        Constant.webUrl = fetchWebUrlState.webUrl
-                                        RetrofitProvider.init(fetchWebUrlState.webUrl) // Initialize dynamically
-                                        Toast.makeText(context, "WebUrl fetched successfully 😊", Toast.LENGTH_SHORT).show()
-                                        navController.navigate(Routes.attendanceScreen(id = profileState.userData?.userData?.idNo!!))
-                                        return@collectLatest
-                                    }
+                                        !fetchWebUrlState.webUrl.isNullOrEmpty() -> {
+                                            Constant.webUrl = fetchWebUrlState.webUrl
+                                            RetrofitProvider.init(fetchWebUrlState.webUrl) // Initialize dynamically
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "WebUrl fetched successfully 😊",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                            navController.navigate(Routes.attendanceScreen(id = profileState.userData?.userData?.idNo!!))
+                                            return@collectLatest
+                                        }
 
-                                    fetchWebUrlState.error != null -> {
-                                        Toast.makeText(context, fetchWebUrlState.error, Toast.LENGTH_SHORT).show()
+                                        fetchWebUrlState.error != null -> {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    fetchWebUrlState.error,
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
                                     }
                                 }
                             }
-                        }
-                    },
-                shape = RoundedCornerShape(topEnd = 20.dp, bottomStart = 20.dp),
-                colors = CardDefaults.cardColors(Color.White),
-                elevation = CardDefaults.cardElevation(5.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 15.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                        },
+                    shape = RoundedCornerShape(topEnd = 20.dp, bottomStart = 20.dp),
+                    colors = CardDefaults.cardColors(Color.White),
+                    elevation = CardDefaults.cardElevation(5.dp)
                 ) {
-                    Card(
+                    Row(
                         modifier = Modifier
-                            .size(35.dp)
-                            .align(Alignment.CenterVertically),
-                        shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(5.dp)
+                            .fillMaxSize()
+                            .padding(horizontal = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.attendance),
-                            contentDescription = "",
+                        Card(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                        )
-                    }
-                    Text(
-                        text = "My Attendance",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.DarkGray,
-                        fontFamily = FontFamily.SansSerif,
-                        modifier = Modifier.padding(start = 15.dp)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(18.dp))
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(horizontal = 17.dp)
-                    .clickable { navController.navigate(Routes.routineScreen(sem = profileState.userData?.userData?.semester.toString())) },
-                shape = RoundedCornerShape(topEnd = 20.dp, bottomStart = 20.dp),
-                colors = CardDefaults.cardColors(Color.White),
-                elevation = CardDefaults.cardElevation(5.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 15.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Card(
-                        modifier = Modifier
-                            .size(35.dp)
-                            .align(Alignment.CenterVertically),
-                        shape = CircleShape,
-                        colors = CardDefaults.cardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(5.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.routine),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                        )
-                    }
-                    Text(
-                        text = "My Class Routine",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.DarkGray,
-                        fontFamily = FontFamily.SansSerif,
-                        modifier = Modifier.padding(start = 15.dp)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Color.LightGray)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(modifier = Modifier.clickable {
-                    firebaseAuth.signOut()
-                    prefs.clearUserPrefs() // <- Clear SharedPreferences+
-                    Toast.makeText(navController.context, "Logged Out🙃", Toast.LENGTH_SHORT)
-                        .show()
-                    // Make sure to navigate only if the NavController is ready
-                    navController.currentBackStackEntry?.let {
-                        navController.navigate(Routes.LoginScreen) {
-                            popUpTo(0) // Clears the backstack
+                                .size(35.dp)
+                                .align(Alignment.CenterVertically),
+                            shape = CircleShape,
+                            colors = CardDefaults.cardColors(Color.White),
+                            elevation = CardDefaults.cardElevation(5.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.attendance),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp)
+                            )
                         }
-                    }
-                }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logout),
-                        contentDescription = "",
-                        modifier = Modifier.size(30.dp),
-                        colorFilter = ColorFilter.tint(
-                            Color.Gray
+                        Text(
+                            text = "My Attendance",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.DarkGray,
+                            fontFamily = FontFamily.SansSerif,
+                            modifier = Modifier.padding(start = 15.dp)
                         )
-                    )
-                    Text(
-                        text = "Logout",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.Gray,
-                        fontFamily = FontFamily.SansSerif,
-                        modifier = Modifier.padding(start = 5.dp)
-                    )
+                    }
+                }
+                Spacer(modifier = Modifier.height(18.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(horizontal = 17.dp)
+                        .clickable { navController.navigate(Routes.routineScreen(sem = profileState.userData?.userData?.semester.toString())) },
+                    shape = RoundedCornerShape(topEnd = 20.dp, bottomStart = 20.dp),
+                    colors = CardDefaults.cardColors(Color.White),
+                    elevation = CardDefaults.cardElevation(5.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 15.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Card(
+                            modifier = Modifier
+                                .size(35.dp)
+                                .align(Alignment.CenterVertically),
+                            shape = CircleShape,
+                            colors = CardDefaults.cardColors(Color.White),
+                            elevation = CardDefaults.cardElevation(5.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.routine),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp)
+                            )
+                        }
+                        Text(
+                            text = "My Class Routine",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.DarkGray,
+                            fontFamily = FontFamily.SansSerif,
+                            modifier = Modifier.padding(start = 15.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                        .background(Color.LightGray)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(modifier = Modifier.clickable {
+                        firebaseAuth.signOut()
+                        prefs.clearUserPrefs() // <- Clear SharedPreferences+
+                        Toast.makeText(navController.context, "Logged Out🙃", Toast.LENGTH_SHORT)
+                            .show()
+                        // Make sure to navigate only if the NavController is ready
+                        navController.currentBackStackEntry?.let {
+                            navController.navigate(Routes.LoginScreen) {
+                                popUpTo(0) // Clears the backstack
+                            }
+                        }
+                    }) {
+                        Image(
+                            painter = painterResource(id = R.drawable.logout),
+                            contentDescription = "",
+                            modifier = Modifier.size(30.dp),
+                            colorFilter = ColorFilter.tint(
+                                Color.Gray
+                            )
+                        )
+                        Text(
+                            text = "Logout",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Gray,
+                            fontFamily = FontFamily.SansSerif,
+                            modifier = Modifier.padding(start = 5.dp)
+                        )
+                    }
                 }
             }
         }

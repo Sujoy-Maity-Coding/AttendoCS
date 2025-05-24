@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sujoy.pbc.ui.theme.PrimaryColor
 
 @Composable
 fun DropdownMenuComponent(
@@ -44,7 +45,7 @@ fun DropdownMenuComponent(
             onClick = { expanded = true },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(Color(0xFF00EC33))
+            colors = ButtonDefaults.buttonColors(PrimaryColor)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -71,7 +72,7 @@ fun DropdownMenuComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
-                .background(Color(0xFF00EC33))
+                .background(Color(0x9444BBA4))
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
